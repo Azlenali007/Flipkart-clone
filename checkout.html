@@ -18,7 +18,7 @@
         font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
         background: #f1f3f6;
         color: #212121;
-        padding-bottom: 70px;
+        padding-bottom: 80px;
       }
       .checkout-wrap {
         max-width: 520px;
@@ -49,17 +49,136 @@
         padding: 12px 14px;
         box-shadow: 0 1px 2px rgba(0,0,0,0.05);
       }
+      .address-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
       .address-title {
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 700;
         color: #878787;
         text-transform: uppercase;
-        margin-bottom: 6px;
+        letter-spacing: 0.5px;
       }
-      .address-text {
+      .btn-change-address {
+        background: none;
+        border: 1px solid #e0e0e0;
+        color: #2874f0;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .btn-change-address:hover {
+        background: #f5f9ff;
+      }
+      .address-preview {
         font-size: 13px;
-        line-height: 1.4;
+        line-height: 1.5;
       }
+      .address-preview .cust-name {
+        font-weight: 700;
+        color: #212121;
+      }
+      .address-preview .cust-tag {
+        display: inline-block;
+        font-size: 10px;
+        background: #f0f0f0;
+        color: #666;
+        font-weight: 600;
+        padding: 2px 6px;
+        border-radius: 3px;
+        margin-left: 6px;
+        text-transform: uppercase;
+      }
+      .address-preview .cust-phone {
+        font-weight: 600;
+        color: #424242;
+        margin-top: 4px;
+      }
+
+      /* Address Form Styling */
+      .address-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .form-row {
+        display: flex;
+        gap: 10px;
+      }
+      .form-group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .form-group label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #555;
+      }
+      .form-control-fk {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 13px;
+        color: #212121;
+        background: #fff;
+        border: 1px solid #d2d2d2;
+        border-radius: 4px;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .form-control-fk:focus {
+        border-color: #2874f0;
+        box-shadow: 0 0 0 2px rgba(40,116,240,0.15);
+      }
+      .form-control-fk.is-invalid {
+        border-color: #d32f2f;
+        background-color: #fff8f8;
+      }
+      .err-text {
+        color: #d32f2f;
+        font-size: 11px;
+        display: none;
+      }
+      .address-type-selector {
+        display: flex;
+        gap: 12px;
+        margin-top: 4px;
+      }
+      .addr-type-opt {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .addr-type-opt input {
+        accent-color: #2874f0;
+        cursor: pointer;
+      }
+      .btn-save-address {
+        background: #fb641b;
+        color: #fff;
+        border: none;
+        padding: 11px 16px;
+        font-size: 13px;
+        font-weight: 700;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+        margin-top: 4px;
+        box-shadow: 0 2px 4px rgba(251, 100, 27, 0.25);
+      }
+      .btn-save-address:hover {
+        background: #e45713;
+      }
+
       .prod-row {
         display: flex;
         gap: 12px;
@@ -188,28 +307,112 @@
         text-decoration: none;
         display: inline-block;
         box-shadow: 0 2px 4px rgba(251, 100, 27, 0.3);
+        cursor: pointer;
       }
       .btn-continue:hover, .btn-continue:active {
         color: #fff;
         background: #e45713;
+      }
+      .alert-toast {
+        display: none;
+        background: #d32f2f;
+        color: #fff;
+        font-size: 12px;
+        padding: 8px 12px;
+        border-radius: 4px;
+        margin-bottom: 8px;
       }
     </style>
   </head>
   <body>
     <div class="checkout-wrap">
       <div class="fk-header">
-        <a href="index.html"><i class="bi bi-arrow-left"></i></a>
+        <a href="product.html"><i class="bi bi-arrow-left"></i></a>
         <div class="fk-header-title">Order Summary</div>
       </div>
 
-      <div class="fk-card">
-        <div class="address-title">Deliver To</div>
-        <div class="address-text">
-          <b>Aaris Ahmed</b>, 560001<br />
-          Flat 402, High Street Towers, Indiranagar, Bengaluru, Karnataka
+      <!-- Deliver To / Address Section -->
+      <div class="fk-card" id="addressCard">
+        <div class="address-header-row">
+          <div class="address-title" id="addrCardTitle"><i class="bi bi-geo-alt-fill text-primary me-1"></i> Deliver To</div>
+          <button type="button" class="btn-change-address" id="btnToggleEdit" style="display:none;" onclick="showAddressForm()">Change</button>
         </div>
+
+        <div id="addressAlert" class="alert-toast">Please fill all required details before continuing.</div>
+
+        <!-- Saved Address Preview -->
+        <div id="addressPreview" class="address-preview" style="display:none;">
+          <div>
+            <span class="cust-name" id="prevName">Customer Name</span>
+            <span class="cust-tag" id="prevTag">HOME</span>
+          </div>
+          <div id="prevAddress" style="color: #424242; margin-top: 4px;">Address line, City, State</div>
+          <div class="cust-phone" id="prevPhone">Mobile: 9876543210</div>
+        </div>
+
+        <!-- Address Fill / Edit Form -->
+        <form id="addressForm" class="address-form" onsubmit="event.preventDefault(); saveAndContinue();">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" id="custName" class="form-control-fk" placeholder="Full Name" required />
+              <span class="err-text" id="errName">Please enter full name</span>
+            </div>
+            <div class="form-group">
+              <label>Mobile Number *</label>
+              <input type="tel" id="custPhone" class="form-control-fk" placeholder="10-digit mobile number" maxlength="10" required />
+              <span class="err-text" id="errPhone">Enter valid 10-digit number</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Pincode *</label>
+              <input type="tel" id="custPincode" class="form-control-fk" placeholder="6-digit pincode" maxlength="6" required />
+              <span class="err-text" id="errPincode">Enter 6-digit pincode</span>
+            </div>
+            <div class="form-group">
+              <label>City / District *</label>
+              <input type="text" id="custCity" class="form-control-fk" placeholder="City" required />
+              <span class="err-text" id="errCity">Please enter city</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>House No., Building Name *</label>
+            <input type="text" id="custHouse" class="form-control-fk" placeholder="Flat, House no., Building, Apartment" required />
+            <span class="err-text" id="errHouse">Please enter house/building details</span>
+          </div>
+
+          <div class="form-group">
+            <label>Road Name, Area, Colony *</label>
+            <input type="text" id="custArea" class="form-control-fk" placeholder="Road name, Area, Colony, Sector" required />
+            <span class="err-text" id="errArea">Please enter area / road name</span>
+          </div>
+
+          <div class="form-group">
+            <label>State *</label>
+            <input type="text" id="custState" class="form-control-fk" placeholder="State (e.g. Delhi, Maharashtra, Karnataka)" required />
+            <span class="err-text" id="errState">Please enter state</span>
+          </div>
+
+          <div class="form-group">
+            <label>Address Type</label>
+            <div class="address-type-selector">
+              <label class="addr-type-opt">
+                <input type="radio" name="addrType" value="Home" checked /> Home (All day delivery)
+              </label>
+              <label class="addr-type-opt">
+                <input type="radio" name="addrType" value="Work" /> Work (10 AM - 5 PM)
+              </label>
+            </div>
+          </div>
+
+          <button type="button" class="btn-save-address" onclick="saveAddressOnly()">Save and Deliver Here</button>
+        </form>
       </div>
 
+      <!-- Product Card -->
       <div class="fk-card">
         <div class="prod-row">
           <img src="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/h/d/9/-original-imagtc2fz9spysyk.jpeg?q=70" class="prod-img" alt="iPhone" />
@@ -226,6 +429,7 @@
         </div>
       </div>
 
+      <!-- Price Breakdown Card -->
       <div class="fk-card">
         <div class="price-card-title">Price Details (1 Item)</div>
         <div class="price-item">
@@ -254,13 +458,14 @@
         <span>Safe and Secure Payments. 100% Authentic Products.</span>
       </div>
 
+      <!-- Bottom Floating Action Bar -->
       <div class="bottom-action-bar">
         <div class="bottom-inner">
           <div class="bottom-price-info">
             <div class="amount" id="chkBottomAmount">₹79,999</div>
             <div class="link">View price details</div>
           </div>
-          <a href="payment.html" class="btn-continue">Continue</a>
+          <button type="button" class="btn-continue" onclick="handleContinue()">Continue</button>
         </div>
       </div>
     </div>
@@ -281,7 +486,195 @@
         document.getElementById('chkTotalAmount').textContent = '₹' + fmt(price);
         document.getElementById('chkBottomAmount').textContent = '₹' + fmt(price);
         document.getElementById('chkSavings').textContent = 'You will save ₹' + fmt(savings) + ' on this order';
+
+        loadAddress();
       })();
+
+      function getSavedAddress() {
+        try {
+          var raw = localStorage.getItem('user_delivery_details');
+          if (raw) return JSON.parse(raw);
+        } catch(e) {}
+        return null;
+      }
+
+      function loadAddress() {
+        var addr = getSavedAddress();
+        if (addr && addr.name && addr.phone && addr.pincode && addr.house) {
+          // Address exists, show preview
+          document.getElementById('prevName').textContent = addr.name;
+          document.getElementById('prevTag').textContent = addr.type || 'HOME';
+          document.getElementById('prevPhone').textContent = 'Mobile: ' + addr.phone;
+          document.getElementById('prevAddress').textContent = addr.house + ', ' + addr.area + ', ' + addr.city + ', ' + addr.state + ' - ' + addr.pincode;
+
+          document.getElementById('addressPreview').style.display = 'block';
+          document.getElementById('addressForm').style.display = 'none';
+          document.getElementById('btnToggleEdit').style.display = 'block';
+          document.getElementById('addrCardTitle').innerHTML = '<i class="bi bi-geo-alt-fill text-primary me-1"></i> Deliver To';
+
+          // Also populate inputs in case user edits
+          document.getElementById('custName').value = addr.name;
+          document.getElementById('custPhone').value = addr.phone;
+          document.getElementById('custPincode').value = addr.pincode;
+          document.getElementById('custCity').value = addr.city;
+          document.getElementById('custHouse').value = addr.house;
+          document.getElementById('custArea').value = addr.area;
+          document.getElementById('custState').value = addr.state;
+          var radios = document.getElementsByName('addrType');
+          for (var i = 0; i < radios.length; i++) {
+            if (radios[i].value === addr.type) radios[i].checked = true;
+          }
+        } else {
+          // No address, show form
+          showAddressForm();
+        }
+      }
+
+      function showAddressForm() {
+        document.getElementById('addressPreview').style.display = 'none';
+        document.getElementById('addressForm').style.display = 'flex';
+        document.getElementById('btnToggleEdit').style.display = 'none';
+        document.getElementById('addrCardTitle').innerHTML = '<i class="bi bi-plus-circle text-primary me-1"></i> Enter Delivery Details';
+        document.getElementById('custName').focus();
+      }
+
+      function validateAddress() {
+        var isValid = true;
+        var name = document.getElementById('custName').value.trim();
+        var phone = document.getElementById('custPhone').value.trim();
+        var pincode = document.getElementById('custPincode').value.trim();
+        var city = document.getElementById('custCity').value.trim();
+        var house = document.getElementById('custHouse').value.trim();
+        var area = document.getElementById('custArea').value.trim();
+        var state = document.getElementById('custState').value.trim();
+
+        // Check name
+        if (name.length < 2) {
+          document.getElementById('custName').classList.add('is-invalid');
+          document.getElementById('errName').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('custName').classList.remove('is-invalid');
+          document.getElementById('errName').style.display = 'none';
+        }
+
+        // Check phone
+        if (!/^[6-9]\d{9}$/.test(phone)) {
+          document.getElementById('custPhone').classList.add('is-invalid');
+          document.getElementById('errPhone').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('custPhone').classList.remove('is-invalid');
+          document.getElementById('errPhone').style.display = 'none';
+        }
+
+        // Check pincode
+        if (!/^\d{6}$/.test(pincode)) {
+          document.getElementById('custPincode').classList.add('is-invalid');
+          document.getElementById('errPincode').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('custPincode').classList.remove('is-invalid');
+          document.getElementById('errPincode').style.display = 'none';
+        }
+
+        // Check city
+        if (city.length < 2) {
+          document.getElementById('custCity').classList.add('is-invalid');
+          document.getElementById('errCity').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('custCity').classList.remove('is-invalid');
+          document.getElementById('errCity').style.display = 'none';
+        }
+
+        // Check house
+        if (house.length < 2) {
+          document.getElementById('custHouse').classList.add('is-invalid');
+          document.getElementById('errHouse').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('custHouse').classList.remove('is-invalid');
+          document.getElementById('errHouse').style.display = 'none';
+        }
+
+        // Check area
+        if (area.length < 2) {
+          document.getElementById('custArea').classList.add('is-invalid');
+          document.getElementById('errArea').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('custArea').classList.remove('is-invalid');
+          document.getElementById('errArea').style.display = 'none';
+        }
+
+        // Check state
+        if (state.length < 2) {
+          document.getElementById('custState').classList.add('is-invalid');
+          document.getElementById('errState').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('custState').classList.remove('is-invalid');
+          document.getElementById('errState').style.display = 'none';
+        }
+
+        return isValid;
+      }
+
+      function saveAddressData() {
+        if (!validateAddress()) {
+          var alertBox = document.getElementById('addressAlert');
+          alertBox.style.display = 'block';
+          setTimeout(function() { alertBox.style.display = 'none'; }, 4000);
+          return false;
+        }
+
+        var type = 'Home';
+        var radios = document.getElementsByName('addrType');
+        for (var i = 0; i < radios.length; i++) {
+          if (radios[i].checked) type = radios[i].value;
+        }
+
+        var addr = {
+          name: document.getElementById('custName').value.trim(),
+          phone: document.getElementById('custPhone').value.trim(),
+          pincode: document.getElementById('custPincode').value.trim(),
+          city: document.getElementById('custCity').value.trim(),
+          house: document.getElementById('custHouse').value.trim(),
+          area: document.getElementById('custArea').value.trim(),
+          state: document.getElementById('custState').value.trim(),
+          type: type
+        };
+
+        try {
+          localStorage.setItem('user_delivery_details', JSON.stringify(addr));
+        } catch(e) {}
+        return true;
+      }
+
+      function saveAddressOnly() {
+        if (saveAddressData()) {
+          loadAddress();
+        }
+      }
+
+      function handleContinue() {
+        var isFormVisible = document.getElementById('addressForm').style.display !== 'none';
+        if (isFormVisible) {
+          if (!saveAddressData()) {
+            document.getElementById('addressCard').scrollIntoView({ behavior: 'smooth' });
+            return;
+          }
+        } else {
+          var addr = getSavedAddress();
+          if (!addr || !addr.name || !addr.phone || !addr.pincode) {
+            showAddressForm();
+            document.getElementById('addressCard').scrollIntoView({ behavior: 'smooth' });
+            return;
+          }
+        }
+        window.location.href = 'payment.html';
+      }
     </script>
   </body>
 </html>

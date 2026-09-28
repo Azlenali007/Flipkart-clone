@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/config.php';
 $formattedPrice = number_format($iphonePrice);
-$orderId = "OD" . mt_rand(1000000000, 9999999999);
+$orderId = "OD" . rand(1000000000, 9999999999);
 $orderDate = date("d M Y, h:i A");
 ?>
 <!DOCTYPE html>
@@ -103,6 +103,9 @@ $orderDate = date("d M Y, h:i A");
         margin-bottom: 12px;
         border-bottom: 1px solid #f0f0f0;
         padding-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
       }
       .detail-row {
         display: flex;
@@ -113,6 +116,23 @@ $orderDate = date("d M Y, h:i A");
       .detail-row .val {
         font-weight: 600;
         color: #212121;
+      }
+
+      .address-block {
+        font-size: 13px;
+        line-height: 1.5;
+        color: #424242;
+      }
+      .address-block .name {
+        font-size: 14px;
+        font-weight: 700;
+        color: #212121;
+        margin-bottom: 2px;
+      }
+      .address-block .phone {
+        font-weight: 600;
+        color: #212121;
+        margin-top: 4px;
       }
 
       .btn-home {
@@ -144,12 +164,22 @@ $orderDate = date("d M Y, h:i A");
       <div class="success-card">
         <div class="success-icon"><i class="bi bi-check-lg"></i></div>
         <div class="success-title">Order Placed Successfully!</div>
-        <div class="success-subtitle">Thank you for your purchase. Confirmation sent via SMS.</div>
-        <div class="order-id-badge">Order ID: #<?php echo $orderId; ?></div>
+        <div class="success-subtitle">Thank you for your purchase. Confirmation sent to your mobile number.</div>
+        <div class="order-id-badge">Order ID: #<?php echo htmlspecialchars($orderId); ?></div>
+      </div>
+
+      <!-- User Delivery Details Card -->
+      <div class="details-card">
+        <div class="card-heading"><i class="bi bi-geo-alt-fill text-primary"></i> Delivery Details</div>
+        <div class="address-block">
+          <div class="name" id="confCustomerName">Customer Name</div>
+          <div id="confFullAddress">Address line, City, State - Pincode</div>
+          <div class="phone" id="confCustomerPhone">Mobile: 9876543210</div>
+        </div>
       </div>
 
       <div class="details-card">
-        <div class="card-heading">Order Details</div>
+        <div class="card-heading"><i class="bi bi-bag-check-fill text-primary"></i> Order Summary</div>
         <div class="detail-row">
           <span>Item</span>
           <span class="val">iPhone (128 GB, Black)</span>
@@ -178,5 +208,25 @@ $orderDate = date("d M Y, h:i A");
         <a href="index.php" class="btn-home">Continue Shopping</a>
       </div>
     </div>
+
+    <script>
+      (function() {
+        try {
+          var raw = localStorage.getItem('user_delivery_details');
+          if (raw) {
+            var addr = JSON.parse(raw);
+            if (addr.name) {
+              document.getElementById('confCustomerName').textContent = addr.name + ' (' + (addr.type || 'HOME') + ')';
+            }
+            if (addr.phone) {
+              document.getElementById('confCustomerPhone').textContent = 'Mobile: ' + addr.phone;
+            }
+            if (addr.house && addr.city) {
+              document.getElementById('confFullAddress').textContent = addr.house + ', ' + addr.area + ', ' + addr.city + ', ' + addr.state + ' - ' + addr.pincode;
+            }
+          }
+        } catch(e) {}
+      })();
+    </script>
   </body>
 </html>

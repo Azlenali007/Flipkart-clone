@@ -1,10 +1,9 @@
 <?php
 require_once __DIR__ . '/config.php';
-
 $formattedPrice = number_format($iphonePrice);
-$encodedUpiId = rawurlencode($upiId);
-$encodedMerchant = rawurlencode($merchantName);
-$encodedNote = rawurlencode("Payment for iPhone");
+$encodedUpiId = urlencode($upiId);
+$encodedMerchant = urlencode($merchantName);
+$encodedNote = urlencode("Payment for iPhone");
 $upiUrl = "upi://pay?pa={$encodedUpiId}&pn={$encodedMerchant}&am={$iphonePrice}&cu=INR&tn={$encodedNote}";
 $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . urlencode($upiUrl);
 ?>
@@ -53,6 +52,37 @@ $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . 
         font-weight: 600;
         flex: 1;
       }
+
+      .deliver-strip {
+        background: #fff;
+        padding: 10px 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eef0f4;
+        font-size: 12px;
+      }
+      .deliver-left {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #555;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .deliver-left b {
+        color: #212121;
+      }
+      .deliver-change {
+        color: #2874f0;
+        font-weight: 600;
+        text-decoration: none;
+        flex-shrink: 0;
+        margin-left: 8px;
+        font-size: 12px;
+      }
+
       .amount-banner {
         background: #fff;
         padding: 14px 16px;
@@ -88,7 +118,7 @@ $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . 
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
       }
       .method-radio {
         width: 18px;
@@ -110,62 +140,51 @@ $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . 
       .upi-apps-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-        margin: 16px 0;
+        gap: 8px;
+        margin-bottom: 16px;
       }
       .upi-app-btn {
         display: flex;
         flex-direction: column;
         align-items: center;
-        background: #f8f9fa;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
+        justify-content: center;
         padding: 10px 4px;
+        background: #fafafa;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
         text-decoration: none;
         color: #212121;
-        cursor: pointer;
         transition: all 0.15s ease;
       }
-      .upi-app-btn:active {
-        transform: scale(0.96);
-        background: #eef2fa;
+      .upi-app-btn:hover, .upi-app-btn:active {
+        background: #f0f7ff;
         border-color: #2874f0;
       }
       .upi-app-icon {
-        width: 38px;
-        height: 38px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        margin-bottom: 6px;
-        background: #fff;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        font-size: 24px;
+        line-height: 1;
+        margin-bottom: 4px;
       }
       .upi-app-name {
         font-size: 11px;
         font-weight: 600;
-        text-align: center;
       }
 
       .pay-primary-btn {
+        display: block;
         width: 100%;
         background: #fb641b;
         color: #fff;
         border: none;
-        padding: 14px 20px;
+        padding: 14px;
         font-size: 16px;
         font-weight: 700;
         border-radius: 4px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
+        text-align: center;
         text-decoration: none;
-        box-shadow: 0 2px 6px rgba(251, 100, 27, 0.35);
-        margin-top: 14px;
+        box-shadow: 0 3px 6px rgba(251, 100, 27, 0.35);
+        margin-bottom: 16px;
+        cursor: pointer;
       }
       .pay-primary-btn:hover, .pay-primary-btn:active {
         background: #e45713;
@@ -173,58 +192,54 @@ $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . 
       }
 
       .upi-details-box {
-        margin-top: 16px;
-        padding: 12px;
-        background: #fafafa;
-        border: 1px dashed #d5d9d9;
+        background: #f9fafb;
+        border: 1px dashed #d1d5db;
         border-radius: 6px;
+        padding: 12px;
         text-align: center;
+        margin-top: 14px;
       }
       .upi-id-tag {
-        font-family: monospace;
-        font-size: 13px;
-        font-weight: 600;
-        color: #2874f0;
-        background: #eef4fe;
-        padding: 4px 8px;
-        border-radius: 4px;
         display: inline-block;
-        margin: 4px 0;
+        background: #fff;
+        border: 1px solid #cbd5e1;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 13px;
+        margin: 6px 0;
       }
       .qr-wrapper {
-        margin: 12px auto;
-        text-align: center;
+        margin: 10px auto;
+        display: inline-block;
+        padding: 8px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
       }
       .qr-img {
         width: 150px;
         height: 150px;
-        border: 1px solid #e0e0e0;
-        padding: 6px;
-        background: #fff;
-        border-radius: 6px;
+        display: block;
       }
-
       .confirm-action {
-        margin-top: 16px;
-        text-align: center;
+        margin-top: 14px;
       }
       .btn-verify {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: #fff;
-        color: #26a541;
-        border: 1.5px solid #26a541;
-        padding: 9px 18px;
-        border-radius: 4px;
+        background: #2874f0;
+        color: #fff;
+        border: none;
+        padding: 10px 18px;
         font-size: 13px;
         font-weight: 600;
+        border-radius: 4px;
         text-decoration: none;
-        cursor: pointer;
+        display: inline-block;
       }
       .btn-verify:hover {
-        background: #f4fbf5;
-        color: #26a541;
+        background: #1f5cc0;
+        color: #fff;
       }
 
       .security-box {
@@ -249,6 +264,15 @@ $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . 
         <div class="fk-header-title">Payments</div>
       </div>
 
+      <!-- Customer Delivery Details Strip -->
+      <div class="deliver-strip">
+        <div class="deliver-left">
+          <i class="bi bi-geo-alt-fill text-primary"></i>
+          <span class="deliver-text">Deliver to: <b id="payUserName">Customer</b>, <span id="payUserPin">...</span></span>
+        </div>
+        <a href="checkout.php" class="deliver-change">Change</a>
+      </div>
+
       <div class="amount-banner">
         <div>
           <div class="label">Amount to Pay</div>
@@ -264,8 +288,8 @@ $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . 
         </div>
         <div class="method-subtitle">Pay securely using any UPI App (Google Pay, PhonePe, Paytm, etc.)</div>
 
-        <!-- Single Primary Payment Button with amount directly from $iphonePrice -->
-        <a href="<?php echo htmlspecialchars($upiUrl); ?>" id="payBtn" class="pay-primary-btn">
+        <!-- Single Primary Payment Button with amount directly from configuration -->
+        <a href="<?php echo htmlspecialchars($upiUrl); ?>" class="pay-primary-btn">
           <i class="bi bi-shield-lock-fill"></i> Pay ₹<?php echo $formattedPrice; ?>
         </a>
 
@@ -315,11 +339,18 @@ $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . 
     </div>
 
     <script>
-      // Automatically attempt UPI link when tapped or on mobile
-      document.getElementById('payBtn').addEventListener('click', function(e) {
-        // Deep link will open UPI chooser on mobile devices
-        console.log("Triggering UPI payment link: <?php echo $upiUrl; ?>");
-      });
+      (function() {
+        try {
+          var raw = localStorage.getItem('user_delivery_details');
+          if (raw) {
+            var user = JSON.parse(raw);
+            if (user.name) {
+              document.getElementById('payUserName').textContent = user.name;
+              document.getElementById('payUserPin').textContent = (user.city ? user.city + ' - ' : '') + user.pincode;
+            }
+          }
+        } catch(e) {}
+      })();
     </script>
   </body>
 </html>

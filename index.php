@@ -503,7 +503,7 @@ $discountPercent = round((($iphonePrice * 1.15 - $iphonePrice) / ($iphonePrice *
       </div>
 
       <div class="list" id="homeList">
-        <a href="checkout.php" class="item" id="iphoneItem">
+        <a href="product.php" class="item" id="iphoneItem">
           <div class="img-wrap">
             <img src="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/h/d/9/-original-imagtc2fz9spysyk.jpeg?q=70" alt="iPhone" />
           </div>
