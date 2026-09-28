@@ -267,9 +267,9 @@
       <div class="amount-banner">
         <div>
           <div class="label">Amount to Pay</div>
-          <div class="prod-name">iPhone</div>
+          <div class="prod-name" id="payProductName">Apple iPhone</div>
         </div>
-        <div class="value" id="payAmountBanner">₹79,999</div>
+        <div class="value" id="payAmountBanner">₹1,44,900</div>
       </div>
 
       <div class="method-card">
@@ -281,7 +281,7 @@
 
         <!-- Single Primary Payment Button with amount directly from configuration -->
         <a href="#" id="payBtn" class="pay-primary-btn">
-          <i class="bi bi-shield-lock-fill"></i> <span id="payBtnText">Pay ₹79,999</span>
+          <i class="bi bi-shield-lock-fill"></i> <span id="payBtnText">Pay ₹1,44,900</span>
         </a>
 
         <!-- UPI App Selection Grid -->
@@ -316,7 +316,7 @@
           </div>
 
           <div class="confirm-action">
-            <a href="confirmation.html" class="btn-verify">
+            <a href="confirmation.html" id="btnCompletedPay" class="btn-verify">
               <i class="bi bi-check2-circle"></i> I have completed payment
             </a>
           </div>
@@ -345,11 +345,24 @@
         } catch(e) {}
 
         var cfg = window.STORE_CONFIG || {
-          iphonePrice: 79999,
+          iphonePrice: 79900,
           upiId: "yourupi@bank",
           merchantName: "Your Store"
         };
-        var price = cfg.iphonePrice;
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get('id');
+        var prods = window.PRODUCTS || [];
+        var prod = prods[0];
+
+        if (id) {
+          for (var i = 0; i < prods.length; i++) {
+            if (prods[i].id === id) { prod = prods[i]; break; }
+          }
+        }
+
+        var price = prod ? prod.price : (cfg.iphonePrice || 79900);
+        var prodName = prod ? prod.name : "Apple iPhone";
         var upiId = cfg.upiId;
         var merchant = cfg.merchantName;
         var fmt = function(num) { return Number(num).toLocaleString('en-IN'); };
@@ -357,8 +370,9 @@
         var upiUrl = "upi://pay?pa=" + encodeURIComponent(upiId) +
                      "&pn=" + encodeURIComponent(merchant) +
                      "&am=" + price +
-                     "&cu=INR&tn=" + encodeURIComponent("Payment for iPhone");
+                     "&cu=INR&tn=" + encodeURIComponent("Payment for " + prodName);
 
+        document.getElementById('payProductName').textContent = prod ? prod.title : "Apple iPhone";
         document.getElementById('payAmountBanner').textContent = '₹' + fmt(price);
         document.getElementById('payBtnText').textContent = 'Pay ₹' + fmt(price);
         document.getElementById('payMerchant').textContent = merchant;
@@ -372,6 +386,11 @@
 
         var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(upiUrl);
         document.getElementById('qrImg').src = qrUrl;
+
+        var confBtn = document.getElementById('btnCompletedPay');
+        if (confBtn && prod) {
+          confBtn.href = 'confirmation.html?id=' + encodeURIComponent(prod.id);
+        }
       })();
     </script>
   </body>

@@ -1,8 +1,10 @@
 <?php
 require_once __DIR__ . '/config.php';
-$formattedPrice = number_format($iphonePrice);
-$mrpPrice = number_format(round($iphonePrice * 1.15));
-$savings = number_format(round($iphonePrice * 0.15));
+$id = $_GET['id'] ?? 'iphone-16-pro';
+$p = $products[$id] ?? $products['iphone-16-pro'];
+$formattedPrice = number_format($p['price']);
+$mrpPrice = number_format($p['mrp']);
+$savings = number_format($p['mrp'] - $p['price']);
 ?>
 <!DOCTYPE html>
 <html lang="en-IN">
@@ -421,14 +423,14 @@ $savings = number_format(round($iphonePrice * 0.15));
       <!-- Product Card -->
       <div class="fk-card">
         <div class="prod-row">
-          <img src="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/h/d/9/-original-imagtc2fz9spysyk.jpeg?q=70" class="prod-img" alt="iPhone" />
+          <img src="<?php echo htmlspecialchars($p['image']); ?>" class="prod-img" alt="<?php echo htmlspecialchars($p['name']); ?>" />
           <div class="prod-info">
-            <div class="prod-title">iPhone (128 GB, Black)</div>
+            <div class="prod-title"><?php echo htmlspecialchars($p['title']); ?></div>
             <div class="prod-seller">Seller: SuperComNet</div>
             <div class="price-line">
               <span class="cur-price" id="chkCurPrice">₹<?php echo $formattedPrice; ?></span>
               <span class="old-price" id="chkOldPrice">₹<?php echo $mrpPrice; ?></span>
-              <span class="off-badge">13% Off</span>
+              <span class="off-badge"><?php echo $p['discount']; ?></span>
             </div>
             <div class="del-badge"><i class="bi bi-truck"></i> Free Delivery</div>
           </div>
@@ -663,7 +665,7 @@ $savings = number_format(round($iphonePrice * 0.15));
             return;
           }
         }
-        window.location.href = 'payment.php';
+        window.location.href = 'payment.php?id=<?php echo urlencode($p['id']); ?>';
       }
     </script>
   </body>

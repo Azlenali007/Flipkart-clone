@@ -1,8 +1,12 @@
 <?php
 require_once __DIR__ . '/config.php';
-$formattedPrice = number_format($iphonePrice);
-$mrpPrice = number_format(round($iphonePrice * 1.15));
-$discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePrice * 1.15)) * 100);
+
+$id = $_GET['id'] ?? 'iphone-16-pro';
+$p = $products[$id] ?? $products['iphone-16-pro'];
+
+$formattedPrice = number_format($p['price']);
+$mrpPrice = number_format($p['mrp']);
+$discount = $p['discount'];
 ?>
 <!DOCTYPE html>
 <html lang="en-IN">
@@ -10,7 +14,7 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no" />
     <link rel="icon" href="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/logo_lite-cbb357.png" />
-    <title>iPhone (128 GB, Black) - Buy Online at Best Price On Flipkart</title>
+    <title><?php echo htmlspecialchars($p['title']); ?> - Flipkart</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -49,10 +53,6 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
         font-size: 18px;
         text-decoration: none;
       }
-      .fk-header-brand {
-        display: flex;
-        flex-direction: column;
-      }
       .fk-header-brand img {
         height: 20px;
         object-fit: contain;
@@ -63,7 +63,6 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
         gap: 16px;
         font-size: 18px;
       }
-
       .gallery-card {
         background: #fff;
         padding: 20px 16px;
@@ -94,7 +93,6 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
         border: none;
         cursor: pointer;
       }
-
       .info-card {
         background: #fff;
         padding: 14px 16px;
@@ -134,7 +132,6 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
         height: 16px;
         object-fit: contain;
       }
-
       .price-section {
         display: flex;
         align-items: baseline;
@@ -156,7 +153,6 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
         color: #388e3c;
         font-weight: 700;
       }
-
       .delivery-info {
         font-size: 12px;
         color: #26a541;
@@ -166,7 +162,6 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
         align-items: center;
         gap: 4px;
       }
-
       .offers-card {
         background: #fff;
         padding: 14px 16px;
@@ -193,33 +188,6 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
         font-size: 14px;
         margin-top: 1px;
       }
-
-      .specs-card {
-        background: #fff;
-        padding: 14px 16px;
-        margin-top: 6px;
-      }
-      .spec-row {
-        display: flex;
-        font-size: 12px;
-        padding: 6px 0;
-        border-bottom: 1px solid #f5f5f5;
-      }
-      .spec-row:last-child {
-        border-bottom: none;
-      }
-      .spec-label {
-        width: 110px;
-        color: #878787;
-        font-weight: 500;
-        flex-shrink: 0;
-      }
-      .spec-val {
-        color: #212121;
-        font-weight: 500;
-        flex: 1;
-      }
-
       .highlights-card {
         background: #fff;
         padding: 14px 16px;
@@ -244,8 +212,6 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
         position: absolute;
         left: 4px;
       }
-
-      /* Fixed Action Bar at Bottom */
       .bottom-action-bar {
         position: fixed;
         bottom: 0;
@@ -299,7 +265,6 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
   </head>
   <body>
     <div class="prod-wrap">
-      <!-- Flipkart Header -->
       <div class="fk-header">
         <div class="fk-header-left">
           <a href="index.php"><i class="bi bi-arrow-left"></i></a>
@@ -309,35 +274,33 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
         </div>
         <div class="fk-header-right">
           <a href="#"><i class="bi bi-search"></i></a>
-          <a href="checkout.php"><i class="bi bi-cart2"></i></a>
+          <a href="checkout.php?id=<?php echo urlencode($p['id']); ?>"><i class="bi bi-cart2"></i></a>
         </div>
       </div>
 
-      <!-- Product Image Gallery -->
       <div class="gallery-card">
         <button class="wishlist-btn" title="Add to Wishlist" onclick="this.classList.toggle('text-danger');">
           <i class="bi bi-heart-fill"></i>
         </button>
         <img
-          src="https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/h/d/9/-original-imagtc2fz9spysyk.jpeg?q=70"
+          src="<?php echo htmlspecialchars($p['image']); ?>"
           class="gallery-img"
-          alt="iPhone"
+          alt="<?php echo htmlspecialchars($p['name']); ?>"
         />
       </div>
 
-      <!-- Product Title and Pricing -->
       <div class="info-card">
-        <div class="prod-title">Apple iPhone 15 (Black, 128 GB)</div>
+        <div class="prod-title"><?php echo htmlspecialchars($p['title']); ?></div>
         <div class="rating-row">
-          <span class="badge-rating">4.6 <i class="bi bi-star-fill" style="font-size: 9px;"></i></span>
-          <span class="ratings-count">2,41,892 Ratings &amp; 12,410 Reviews</span>
+          <span class="badge-rating"><?php echo $p['rating']; ?> <i class="bi bi-star-fill" style="font-size: 9px;"></i></span>
+          <span class="ratings-count"><?php echo $p['reviews']; ?> Ratings &amp; Reviews</span>
           <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/fa_62673a.png" class="assured-tag" alt="Flipkart Assured" />
         </div>
 
         <div class="price-section">
           <span class="sell-price">₹<?php echo $formattedPrice; ?></span>
           <span class="mrp-price">₹<?php echo $mrpPrice; ?></span>
-          <span class="discount-tag"><?php echo $discount; ?>% off</span>
+          <span class="discount-tag"><?php echo $discount; ?></span>
         </div>
 
         <div class="delivery-info">
@@ -345,7 +308,6 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
         </div>
       </div>
 
-      <!-- Available Offers -->
       <div class="offers-card">
         <div class="card-title">Available Offers</div>
         <div class="offer-item">
@@ -354,7 +316,7 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
         </div>
         <div class="offer-item">
           <i class="bi bi-tag-fill"></i>
-          <div><b>Special Price:</b> Get extra discount on UPI payments</div>
+          <div><b>Special Price:</b> Extra discount on UPI payments</div>
         </div>
         <div class="offer-item">
           <i class="bi bi-tag-fill"></i>
@@ -362,55 +324,21 @@ $discount = round(((round($iphonePrice * 1.15) - $iphonePrice) / round($iphonePr
         </div>
       </div>
 
-      <!-- Product Highlights -->
       <div class="highlights-card">
         <div class="card-title">Highlights</div>
         <ul class="highlight-list">
-          <li>128 GB ROM</li>
-          <li>15.49 cm (6.1 inch) Super Retina XDR Display</li>
-          <li>48MP + 12MP Dual Rear Camera | 12MP Front Camera</li>
-          <li>A16 Bionic Chip, 6 Core Processor</li>
-          <li>Ceramic Shield front, colour-infused glass back</li>
-          <li>Dynamic Island, a magical way to interact with iPhone</li>
+          <?php foreach ($p['highlights'] as $hl): ?>
+          <li><?php echo htmlspecialchars($hl); ?></li>
+          <?php endforeach; ?>
         </ul>
       </div>
 
-      <!-- Specifications -->
-      <div class="specs-card">
-        <div class="card-title">Specifications</div>
-        <div class="spec-row">
-          <span class="spec-label">Model Name</span>
-          <span class="spec-val">iPhone 15</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Color</span>
-          <span class="spec-val">Black</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Internal Storage</span>
-          <span class="spec-val">128 GB</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Display Size</span>
-          <span class="spec-val">15.49 cm (6.1 inch)</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Primary Camera</span>
-          <span class="spec-val">48MP + 12MP</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Network Type</span>
-          <span class="spec-val">5G, 4G VOLTE, 4G, 3G, 2G</span>
-        </div>
-      </div>
-
-      <!-- Fixed Bottom Action Bar with Buy Option -->
       <div class="bottom-action-bar">
         <div class="bottom-inner">
-          <a href="checkout.php" class="btn-add-cart">
+          <a href="checkout.php?id=<?php echo urlencode($p['id']); ?>" class="btn-add-cart">
             <i class="bi bi-cart-plus"></i> Go to Cart
           </a>
-          <a href="checkout.php" class="btn-buy-now">
+          <a href="checkout.php?id=<?php echo urlencode($p['id']); ?>" class="btn-buy-now">
             <i class="bi bi-lightning-fill"></i> Buy Now
           </a>
         </div>

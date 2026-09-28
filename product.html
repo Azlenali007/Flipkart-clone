@@ -313,25 +313,26 @@
           <i class="bi bi-heart-fill"></i>
         </button>
         <img
-          src="https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/h/d/9/-original-imagtc2fz9spysyk.jpeg?q=70"
+          src="https://rukminim2.flixcart.com/image/416/416/xif0q/mobile/n/q/h/-resized-original-imahgfmzjj8gtqbc.jpeg"
           class="gallery-img"
-          alt="iPhone"
+          id="prodGalleryImg"
+          alt="Product"
         />
       </div>
 
       <!-- Product Title and Pricing -->
       <div class="info-card">
-        <div class="prod-title">Apple iPhone 15 (Black, 128 GB)</div>
+        <div class="prod-title" id="prodTitle">Apple iPhone 16 Pro Max (Desert Titanium, 256 GB)</div>
         <div class="rating-row">
-          <span class="badge-rating">4.6 <i class="bi bi-star-fill" style="font-size: 9px;"></i></span>
-          <span class="ratings-count">2,41,892 Ratings &amp; 12,410 Reviews</span>
+          <span class="badge-rating"><span id="prodRating">4.8</span> <i class="bi bi-star-fill" style="font-size: 9px;"></i></span>
+          <span class="ratings-count"><span id="prodReviews">3,842</span> Ratings &amp; Reviews</span>
           <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/fa_62673a.png" class="assured-tag" alt="Flipkart Assured" />
         </div>
 
         <div class="price-section">
-          <span class="sell-price" id="prodSellPrice">₹79,999</span>
-          <span class="mrp-price" id="prodMrpPrice">₹91,999</span>
-          <span class="discount-tag" id="prodDiscTag">13% off</span>
+          <span class="sell-price" id="prodSellPrice">₹1,44,900</span>
+          <span class="mrp-price" id="prodMrpPrice">₹1,59,900</span>
+          <span class="discount-tag" id="prodDiscTag">9% off</span>
         </div>
 
         <div class="delivery-info">
@@ -348,7 +349,7 @@
         </div>
         <div class="offer-item">
           <i class="bi bi-tag-fill"></i>
-          <div><b>Special Price:</b> Get extra discount on UPI payments</div>
+          <div><b>Special Price:</b> Extra discount on UPI payments</div>
         </div>
         <div class="offer-item">
           <i class="bi bi-tag-fill"></i>
@@ -359,71 +360,69 @@
       <!-- Product Highlights -->
       <div class="highlights-card">
         <div class="card-title">Highlights</div>
-        <ul class="highlight-list">
-          <li>128 GB ROM</li>
-          <li>15.49 cm (6.1 inch) Super Retina XDR Display</li>
-          <li>48MP + 12MP Dual Rear Camera | 12MP Front Camera</li>
-          <li>A16 Bionic Chip, 6 Core Processor</li>
-          <li>Ceramic Shield front, colour-infused glass back</li>
-          <li>Dynamic Island, a magical way to interact with iPhone</li>
+        <ul class="highlight-list" id="prodHighlightsList">
+          <li>Super Retina XDR Display</li>
+          <li>Apple Bionic / Pro Chip</li>
+          <li>Advanced Pro Camera System</li>
+          <li>Fast Charging &amp; MagSafe Compatible</li>
         </ul>
-      </div>
-
-      <!-- Specifications -->
-      <div class="specs-card">
-        <div class="card-title">Specifications</div>
-        <div class="spec-row">
-          <span class="spec-label">Model Name</span>
-          <span class="spec-val">iPhone 15</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Color</span>
-          <span class="spec-val">Black</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Internal Storage</span>
-          <span class="spec-val">128 GB</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Display Size</span>
-          <span class="spec-val">15.49 cm (6.1 inch)</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Primary Camera</span>
-          <span class="spec-val">48MP + 12MP</span>
-        </div>
-        <div class="spec-row">
-          <span class="spec-label">Network Type</span>
-          <span class="spec-val">5G, 4G VOLTE, 4G, 3G, 2G</span>
-        </div>
       </div>
 
       <!-- Fixed Bottom Action Bar with Buy Option -->
       <div class="bottom-action-bar">
         <div class="bottom-inner">
-          <a href="checkout.html" class="btn-add-cart">
+          <a href="checkout.html" class="btn-add-cart" id="prodAddCartBtn">
             <i class="bi bi-cart-plus"></i> Go to Cart
           </a>
-          <a href="checkout.html" class="btn-buy-now">
+          <a href="checkout.html" class="btn-buy-now" id="prodBuyNowBtn">
             <i class="bi bi-lightning-fill"></i> Buy Now
           </a>
         </div>
       </div>
     </div>
 
-    <!-- Store Configuration and Price Sync -->
+    <!-- Store Configuration and Product Sync -->
     <script src="data/site-settings.js"></script>
     <script>
       (function() {
-        var cfg = window.STORE_CONFIG || { iphonePrice: 79999 };
-        var price = cfg.iphonePrice;
-        var mrp = Math.round(price * 1.15);
-        var disc = Math.round(((mrp - price) / mrp) * 100);
-        var fmt = function(num) { return Number(num).toLocaleString('en-IN'); };
+        var urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get('id');
+        var prods = window.PRODUCTS || [];
+        var prod = prods[0];
 
-        document.getElementById('prodSellPrice').textContent = '₹' + fmt(price);
-        document.getElementById('prodMrpPrice').textContent = '₹' + fmt(mrp);
-        document.getElementById('prodDiscTag').textContent = disc + '% off';
+        if (id) {
+          for (var i = 0; i < prods.length; i++) {
+            if (prods[i].id === id) {
+              prod = prods[i];
+              break;
+            }
+          }
+        }
+
+        if (prod) {
+          document.title = prod.title + ' - Flipkart';
+          document.getElementById('prodTitle').textContent = prod.title;
+          document.getElementById('prodGalleryImg').src = prod.image;
+          document.getElementById('prodRating').textContent = prod.rating;
+          document.getElementById('prodReviews').textContent = prod.reviews;
+          document.getElementById('prodSellPrice').textContent = '₹' + Number(prod.price).toLocaleString('en-IN');
+          document.getElementById('prodMrpPrice').textContent = '₹' + Number(prod.mrp).toLocaleString('en-IN');
+          document.getElementById('prodDiscTag').textContent = prod.discount;
+
+          // Highlights
+          if (prod.highlights && prod.highlights.length) {
+            var hlHtml = '';
+            for (var j = 0; j < prod.highlights.length; j++) {
+              hlHtml += '<li>' + prod.highlights[j] + '</li>';
+            }
+            document.getElementById('prodHighlightsList').innerHTML = hlHtml;
+          }
+
+          // Update Links with product ID
+          var checkoutUrl = 'checkout.html?id=' + encodeURIComponent(prod.id);
+          document.getElementById('prodAddCartBtn').href = checkoutUrl;
+          document.getElementById('prodBuyNowBtn').href = checkoutUrl;
+        }
       })();
     </script>
   </body>

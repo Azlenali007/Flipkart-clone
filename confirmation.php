@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__ . '/config.php';
-$formattedPrice = number_format($iphonePrice);
+
+$id = $_GET['id'] ?? 'iphone-16-pro';
+$p = $products[$id] ?? $products['iphone-16-pro'];
+
+$formattedPrice = number_format($p['price']);
 $orderId = "OD" . rand(1000000000, 9999999999);
 $orderDate = date("d M Y, h:i A");
 ?>
@@ -182,7 +186,7 @@ $orderDate = date("d M Y, h:i A");
         <div class="card-heading"><i class="bi bi-bag-check-fill text-primary"></i> Order Summary</div>
         <div class="detail-row">
           <span>Item</span>
-          <span class="val">iPhone (128 GB, Black)</span>
+          <span class="val"><?php echo htmlspecialchars($p['title']); ?></span>
         </div>
         <div class="detail-row">
           <span>Amount Paid</span>

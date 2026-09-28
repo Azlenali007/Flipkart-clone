@@ -415,14 +415,14 @@
       <!-- Product Card -->
       <div class="fk-card">
         <div class="prod-row">
-          <img src="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/h/d/9/-original-imagtc2fz9spysyk.jpeg?q=70" class="prod-img" alt="iPhone" />
+          <img src="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/n/q/h/-resized-original-imahgfmzjj8gtqbc.jpeg" class="prod-img" id="chkProdImg" alt="Product" />
           <div class="prod-info">
-            <div class="prod-title">iPhone (128 GB, Black)</div>
+            <div class="prod-title" id="chkProdTitle">Apple iPhone 16 Pro Max (Desert Titanium, 256 GB)</div>
             <div class="prod-seller">Seller: SuperComNet</div>
             <div class="price-line">
-              <span class="cur-price" id="chkCurPrice">₹79,999</span>
-              <span class="old-price" id="chkOldPrice">₹91,999</span>
-              <span class="off-badge">13% Off</span>
+              <span class="cur-price" id="chkCurPrice">₹1,44,900</span>
+              <span class="old-price" id="chkOldPrice">₹1,59,900</span>
+              <span class="off-badge" id="chkOffBadge">9% Off</span>
             </div>
             <div class="del-badge"><i class="bi bi-truck"></i> Free Delivery</div>
           </div>
@@ -472,20 +472,38 @@
 
     <script src="data/site-settings.js"></script>
     <script>
-      (function() {
-        var cfg = window.STORE_CONFIG || { iphonePrice: 79999 };
-        var price = cfg.iphonePrice;
-        var mrp = Math.round(price * 1.15);
-        var savings = mrp - price;
-        var fmt = function(num) { return Number(num).toLocaleString('en-IN'); };
+      var currentProduct = null;
 
-        document.getElementById('chkCurPrice').textContent = '₹' + fmt(price);
-        document.getElementById('chkOldPrice').textContent = '₹' + fmt(mrp);
-        document.getElementById('chkPriceItem').textContent = '₹' + fmt(mrp);
-        document.getElementById('chkDiscount').textContent = '- ₹' + fmt(savings);
-        document.getElementById('chkTotalAmount').textContent = '₹' + fmt(price);
-        document.getElementById('chkBottomAmount').textContent = '₹' + fmt(price);
-        document.getElementById('chkSavings').textContent = 'You will save ₹' + fmt(savings) + ' on this order';
+      (function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get('id');
+        var prods = window.PRODUCTS || [];
+        var prod = prods[0];
+
+        if (id) {
+          for (var i = 0; i < prods.length; i++) {
+            if (prods[i].id === id) { prod = prods[i]; break; }
+          }
+        }
+        currentProduct = prod;
+
+        if (prod) {
+          var price = prod.price;
+          var mrp = prod.mrp;
+          var savings = mrp - price;
+          var fmt = function(num) { return Number(num).toLocaleString('en-IN'); };
+
+          document.getElementById('chkProdImg').src = prod.image;
+          document.getElementById('chkProdTitle').textContent = prod.title;
+          document.getElementById('chkCurPrice').textContent = '₹' + fmt(price);
+          document.getElementById('chkOldPrice').textContent = '₹' + fmt(mrp);
+          document.getElementById('chkOffBadge').textContent = prod.discount;
+          document.getElementById('chkPriceItem').textContent = '₹' + fmt(mrp);
+          document.getElementById('chkDiscount').textContent = '- ₹' + fmt(savings);
+          document.getElementById('chkTotalAmount').textContent = '₹' + fmt(price);
+          document.getElementById('chkBottomAmount').textContent = '₹' + fmt(price);
+          document.getElementById('chkSavings').textContent = 'You will save ₹' + fmt(savings) + ' on this order';
+        }
 
         loadAddress();
       })();
@@ -501,7 +519,6 @@
       function loadAddress() {
         var addr = getSavedAddress();
         if (addr && addr.name && addr.phone && addr.pincode && addr.house) {
-          // Address exists, show preview
           document.getElementById('prevName').textContent = addr.name;
           document.getElementById('prevTag').textContent = addr.type || 'HOME';
           document.getElementById('prevPhone').textContent = 'Mobile: ' + addr.phone;
@@ -512,7 +529,6 @@
           document.getElementById('btnToggleEdit').style.display = 'block';
           document.getElementById('addrCardTitle').innerHTML = '<i class="bi bi-geo-alt-fill text-primary me-1"></i> Deliver To';
 
-          // Also populate inputs in case user edits
           document.getElementById('custName').value = addr.name;
           document.getElementById('custPhone').value = addr.phone;
           document.getElementById('custPincode').value = addr.pincode;
@@ -525,7 +541,6 @@
             if (radios[i].value === addr.type) radios[i].checked = true;
           }
         } else {
-          // No address, show form
           showAddressForm();
         }
       }
@@ -548,7 +563,6 @@
         var area = document.getElementById('custArea').value.trim();
         var state = document.getElementById('custState').value.trim();
 
-        // Check name
         if (name.length < 2) {
           document.getElementById('custName').classList.add('is-invalid');
           document.getElementById('errName').style.display = 'block';
@@ -558,7 +572,6 @@
           document.getElementById('errName').style.display = 'none';
         }
 
-        // Check phone
         if (!/^[6-9]\d{9}$/.test(phone)) {
           document.getElementById('custPhone').classList.add('is-invalid');
           document.getElementById('errPhone').style.display = 'block';
@@ -568,7 +581,6 @@
           document.getElementById('errPhone').style.display = 'none';
         }
 
-        // Check pincode
         if (!/^\d{6}$/.test(pincode)) {
           document.getElementById('custPincode').classList.add('is-invalid');
           document.getElementById('errPincode').style.display = 'block';
@@ -578,7 +590,6 @@
           document.getElementById('errPincode').style.display = 'none';
         }
 
-        // Check city
         if (city.length < 2) {
           document.getElementById('custCity').classList.add('is-invalid');
           document.getElementById('errCity').style.display = 'block';
@@ -588,7 +599,6 @@
           document.getElementById('errCity').style.display = 'none';
         }
 
-        // Check house
         if (house.length < 2) {
           document.getElementById('custHouse').classList.add('is-invalid');
           document.getElementById('errHouse').style.display = 'block';
@@ -598,7 +608,6 @@
           document.getElementById('errHouse').style.display = 'none';
         }
 
-        // Check area
         if (area.length < 2) {
           document.getElementById('custArea').classList.add('is-invalid');
           document.getElementById('errArea').style.display = 'block';
@@ -608,7 +617,6 @@
           document.getElementById('errArea').style.display = 'none';
         }
 
-        // Check state
         if (state.length < 2) {
           document.getElementById('custState').classList.add('is-invalid');
           document.getElementById('errState').style.display = 'block';
@@ -673,7 +681,8 @@
             return;
           }
         }
-        window.location.href = 'payment.html';
+        var pId = currentProduct ? currentProduct.id : 'iphone-16-pro';
+        window.location.href = 'payment.html?id=' + encodeURIComponent(pId);
       }
     </script>
   </body>

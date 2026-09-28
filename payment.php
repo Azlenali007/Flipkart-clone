@@ -1,10 +1,14 @@
 <?php
 require_once __DIR__ . '/config.php';
-$formattedPrice = number_format($iphonePrice);
+
+$id = $_GET['id'] ?? 'iphone-16-pro';
+$p = $products[$id] ?? $products['iphone-16-pro'];
+
+$formattedPrice = number_format($p['price']);
 $encodedUpiId = urlencode($upiId);
 $encodedMerchant = urlencode($merchantName);
-$encodedNote = urlencode("Payment for iPhone");
-$upiUrl = "upi://pay?pa={$encodedUpiId}&pn={$encodedMerchant}&am={$iphonePrice}&cu=INR&tn={$encodedNote}";
+$encodedNote = urlencode("Payment for " . $p['name']);
+$upiUrl = "upi://pay?pa={$encodedUpiId}&pn={$encodedMerchant}&am={$p['price']}&cu=INR&tn={$encodedNote}";
 $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . urlencode($upiUrl);
 ?>
 <!DOCTYPE html>
@@ -276,7 +280,7 @@ $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . 
       <div class="amount-banner">
         <div>
           <div class="label">Amount to Pay</div>
-          <div class="prod-name">iPhone</div>
+          <div class="prod-name"><?php echo htmlspecialchars($p['title']); ?></div>
         </div>
         <div class="value">₹<?php echo $formattedPrice; ?></div>
       </div>
@@ -325,7 +329,7 @@ $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . 
           </div>
 
           <div class="confirm-action">
-            <a href="confirmation.php" class="btn-verify">
+            <a href="confirmation.php?id=<?php echo urlencode($p['id']); ?>" class="btn-verify">
               <i class="bi bi-check2-circle"></i> I have completed payment
             </a>
           </div>
