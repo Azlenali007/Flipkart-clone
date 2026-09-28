@@ -1,0 +1,6 @@
+{
+  "name": "Flipkart iPhone UPI Store",
+  "description": "Flipkart-style store featuring iPhone with seamless checkout, online UPI payment, and instant order confirmation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

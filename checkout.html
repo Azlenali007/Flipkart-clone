@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no" />
+    <link rel="icon" href="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/logo_lite-cbb357.png" />
+    <title>Order Summary - Flipkart</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+        background: #f1f3f6;
+        color: #212121;
+        padding-bottom: 70px;
+      }
+      .checkout-wrap {
+        max-width: 520px;
+        margin: 0 auto;
+        background: #f1f3f6;
+      }
+      .fk-header {
+        background: #2874f0;
+        color: #fff;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .fk-header a {
+        color: #fff;
+        font-size: 18px;
+        text-decoration: none;
+      }
+      .fk-header-title {
+        font-size: 15px;
+        font-weight: 600;
+        flex: 1;
+      }
+      .fk-card {
+        background: #fff;
+        margin-top: 8px;
+        padding: 12px 14px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      }
+      .address-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: #878787;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+      .address-text {
+        font-size: 13px;
+        line-height: 1.4;
+      }
+      .prod-row {
+        display: flex;
+        gap: 12px;
+      }
+      .prod-img {
+        width: 80px;
+        height: 100px;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
+      .prod-info {
+        flex: 1;
+      }
+      .prod-title {
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.4;
+        margin-bottom: 4px;
+      }
+      .prod-seller {
+        font-size: 11px;
+        color: #878787;
+        margin-bottom: 6px;
+      }
+      .price-line {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+      .cur-price {
+        font-size: 16px;
+        font-weight: 700;
+        color: #212121;
+      }
+      .old-price {
+        font-size: 13px;
+        color: #878787;
+        text-decoration: line-through;
+      }
+      .off-badge {
+        font-size: 12px;
+        font-weight: 700;
+        color: #388e3c;
+      }
+      .del-badge {
+        font-size: 12px;
+        color: #26a541;
+        font-weight: 600;
+      }
+      .price-card-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #878787;
+        text-transform: uppercase;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 10px;
+      }
+      .price-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        margin-bottom: 10px;
+      }
+      .price-total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 15px;
+        font-weight: 700;
+        padding-top: 10px;
+        border-top: 1px dashed #e0e0e0;
+        margin-top: 10px;
+      }
+      .savings-bar {
+        font-size: 12px;
+        color: #388e3c;
+        font-weight: 600;
+        padding-top: 8px;
+      }
+      .security-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 14px;
+        color: #878787;
+        font-size: 12px;
+      }
+      .security-box i {
+        font-size: 18px;
+        color: #26a541;
+      }
+      .bottom-action-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+        z-index: 100;
+      }
+      .bottom-inner {
+        max-width: 520px;
+        margin: 0 auto;
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .bottom-price-info .amount {
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .bottom-price-info .link {
+        font-size: 11px;
+        color: #2874f0;
+      }
+      .btn-continue {
+        background: #fb641b;
+        color: #fff;
+        border: none;
+        padding: 12px 28px;
+        font-size: 14px;
+        font-weight: 700;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 2px 4px rgba(251, 100, 27, 0.3);
+      }
+      .btn-continue:hover, .btn-continue:active {
+        color: #fff;
+        background: #e45713;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="checkout-wrap">
+      <div class="fk-header">
+        <a href="index.html"><i class="bi bi-arrow-left"></i></a>
+        <div class="fk-header-title">Order Summary</div>
+      </div>
+
+      <div class="fk-card">
+        <div class="address-title">Deliver To</div>
+        <div class="address-text">
+          <b>Aaris Ahmed</b>, 560001<br />
+          Flat 402, High Street Towers, Indiranagar, Bengaluru, Karnataka
+        </div>
+      </div>
+
+      <div class="fk-card">
+        <div class="prod-row">
+          <img src="https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/h/d/9/-original-imagtc2fz9spysyk.jpeg?q=70" class="prod-img" alt="iPhone" />
+          <div class="prod-info">
+            <div class="prod-title">iPhone (128 GB, Black)</div>
+            <div class="prod-seller">Seller: SuperComNet</div>
+            <div class="price-line">
+              <span class="cur-price" id="chkCurPrice">₹79,999</span>
+              <span class="old-price" id="chkOldPrice">₹91,999</span>
+              <span class="off-badge">13% Off</span>
+            </div>
+            <div class="del-badge"><i class="bi bi-truck"></i> Free Delivery</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fk-card">
+        <div class="price-card-title">Price Details (1 Item)</div>
+        <div class="price-item">
+          <span>Price (1 item)</span>
+          <span id="chkPriceItem">₹91,999</span>
+        </div>
+        <div class="price-item">
+          <span>Discount</span>
+          <span style="color:#388e3c;" id="chkDiscount">- ₹12,000</span>
+        </div>
+        <div class="price-item">
+          <span>Delivery Charges</span>
+          <span style="color:#388e3c;">FREE</span>
+        </div>
+        <div class="price-total">
+          <span>Total Amount</span>
+          <span id="chkTotalAmount">₹79,999</span>
+        </div>
+        <div class="savings-bar" id="chkSavings">
+          You will save ₹12,000 on this order
+        </div>
+      </div>
+
+      <div class="security-box">
+        <i class="bi bi-shield-check"></i>
+        <span>Safe and Secure Payments. 100% Authentic Products.</span>
+      </div>
+
+      <div class="bottom-action-bar">
+        <div class="bottom-inner">
+          <div class="bottom-price-info">
+            <div class="amount" id="chkBottomAmount">₹79,999</div>
+            <div class="link">View price details</div>
+          </div>
+          <a href="payment.html" class="btn-continue">Continue</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="data/site-settings.js"></script>
+    <script>
+      (function() {
+        var cfg = window.STORE_CONFIG || { iphonePrice: 79999 };
+        var price = cfg.iphonePrice;
+        var mrp = Math.round(price * 1.15);
+        var savings = mrp - price;
+        var fmt = function(num) { return Number(num).toLocaleString('en-IN'); };
+
+        document.getElementById('chkCurPrice').textContent = '₹' + fmt(price);
+        document.getElementById('chkOldPrice').textContent = '₹' + fmt(mrp);
+        document.getElementById('chkPriceItem').textContent = '₹' + fmt(mrp);
+        document.getElementById('chkDiscount').textContent = '- ₹' + fmt(savings);
+        document.getElementById('chkTotalAmount').textContent = '₹' + fmt(price);
+        document.getElementById('chkBottomAmount').textContent = '₹' + fmt(price);
+        document.getElementById('chkSavings').textContent = 'You will save ₹' + fmt(savings) + ' on this order';
+      })();
+    </script>
+  </body>
+</html>
